@@ -1,0 +1,118 @@
+---
+title: "k-NN Algorithm"
+output: html_document
+date: "2024-06-22"
+---
+
+```{r setup, include=FALSE}
+# Install prerequisite packages if not already installed
+if (!requireNamespace("dplyr", quietly = TRUE)) {
+  install.packages("dplyr", dependencies = TRUE)
+}
+if (!requireNamespace("ggplot2", quietly = TRUE)) {
+  install.packages("ggplot2")
+}
+if (!requireNamespace("ggfortify", quietly = TRUE)) {
+  install.packages("ggfortify")
+}
+
+# Load required libraries
+library(dplyr)
+library(ggplot2)
+library(ggfortify)
+```
+
+##Reading the Data Set
+```{r}
+
+diabetes_data8173= read.csv("~/Documents/R Program/diabetes.csv")
+diabetes_data8173
+```
+
+## Summarizing the dataset
+```{r}
+summaryDiabetesData_8173<-summary(diabetes_data8173)
+summaryDiabetesData_8173
+```
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+## Showcasing the structure and dimension of the dataset
+```{r}
+str(diabetes_data8173)
+dim(diabetes_data8173)
+```
+
+## Showing the class variable in diabetes dataset?
+
+```{r}
+class(diabetes_data8173)
+```
+
+# Changing the class type of the class variable of diabetes dataset to factor. 
+#Showing the output after the conversion.
+
+
+```{r}
+diabetes_data8173$outcome <- as.factor(diabetes_data8173$outcome) 
+print("Outcome column after conversion:")
+str(diabetes_data8173$outcome)
+```
+```{r}
+colSums(is.na(diabetes_data8173))
+```
+
+# Replace the missing values in diabetes by 0. 
+```{r}
+diabetes_data8173[(is.na(diabetes_data8173))]<-0
+print("After replacing missing values with 0:")
+colSums(is.na(diabetes_data8173))
+```
+# preparing data for plotting by removing outcome column
+```{r}
+plotDiabetes_data8173=select(diabetes_data8173,c(1,2,3,4,5,6,7,8))
+names(diabetes_data8173)
+```
+
+# Perform k-means clustering
+```{r}
+```
+
+
+```{r}
+kmeans.diabetesResult2_8173 <- kmeans(plotDiabetes_data8173, 2)
+```
+
+# Plotting the data
+```{r}
+plot(plotDiabetes_data8173[c("plas", "age")], col = kmeans.diabetesResult2_8173$cluster)
+```
+```{r}
+kmeans.diabetesResult3_8173 <- kmeans(plotDiabetes_data8173, 3)
+# Define custom colors for clusters
+cluster_colors <- c("red", "green", "orange")
+#plotting the data
+plot(plotDiabetes_data8173[c("preg", "insu")], col = cluster_colors[kmeans.diabetesResult3_8173$cluster],
+     main = "K-Means Clustering of Diabetes Data",
+     xlab = "Blood Pressure (pres)",
+     ylab = "Insulin (insu)")
+legend("topright", legend = unique(kmeans.diabetesResult3_8173$cluster), col = cluster_colors, pch = 1)
+```
+
+
+#Plotting
+```{r}
+kmeans.diabetesResult4_8173 <- kmeans(plotDiabetes_data8173, 4)
+# Define custom colors for clusters
+cluster_colors <- c("blue","violet", "cyan", "green")
+#plotting the data
+plot(plotDiabetes_data8173[c("pres", "insu")], col = cluster_colors[kmeans.diabetesResult4_8173$cluster],
+     main = "Scatter plot of Diabetes Data",
+     xlab = "Blood Pressure (pres)",
+     ylab = "Insulin (insu)")
+
+plot(plotDiabetes_data8173, col = kmeans.diabetesResult3_8173$cluster)
+```
+
